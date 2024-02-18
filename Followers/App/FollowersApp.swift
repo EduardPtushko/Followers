@@ -12,6 +12,9 @@ struct FollowersApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    UINavigationBar.appearance().tintColor = .systemGreen
+                }
         }
     }
 }
