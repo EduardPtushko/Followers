@@ -9,7 +9,11 @@ import UIKit
 
 let validStatus = 200...299
 
-class NetworkManager {
+protocol NetworkManagerProtocol {
+    func getFollowers(for username: String, page: Int) async throws -> [Follower]
+}
+
+class NetworkManager: NetworkManagerProtocol {
     static var shared = NetworkManager()
     let cache = NSCache<NSString, UIImage>()
 
@@ -39,6 +43,4 @@ class NetworkManager {
         }
     }
 }
-
-
 

@@ -43,5 +43,5 @@ struct AvatarImageView: View {
 }
 
 #Preview {
-    AvatarImageView(urlSting: "djfjf")
+    AvatarImageView(urlSting: "https://avatars.githubusercontent.com/u/217?v=4")
 }

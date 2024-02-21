@@ -30,6 +30,13 @@ struct FollowerListView: View {
                                 .frame(height: 20)
                         }
                         .padding(.top, 12)
+                        .onAppear {
+                            if follower == viewModel.followers.last && viewModel.hasMoreFollowers {
+                                Task {
+                                    await viewModel.getFollowers(username: username)
+                                }
+                            }
+                        }
                     }
                 }
                 .padding()
@@ -38,7 +45,6 @@ struct FollowerListView: View {
             if showingAlert {
                 AlertView(alertTitle: "Empty Username", message: "Please enter a username. We need to know who to look for.", buttonTitle: "Ok") {
                     viewModel.error = nil
-                    
                 }
                 
             }
@@ -50,5 +56,5 @@ struct FollowerListView: View {
 }
 
 #Preview {
-    FollowerListView(username: "apple")
+    FollowerListView(username: "SAllen0400")
 }

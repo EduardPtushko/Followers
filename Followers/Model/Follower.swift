@@ -14,3 +14,4 @@ struct Follower: Identifiable {
 }
 
 extension Follower: Codable {}
+extension Follower: Equatable {}

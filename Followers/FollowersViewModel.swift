@@ -9,17 +9,26 @@ import Foundation
 
 @Observable
 final class FollowersViewModel {
-    let networkManager = NetworkManager.shared
+    let networkManager: NetworkManagerProtocol
     var followers: [Follower] = []
     var error: String?
+    var page = 0
+    var hasMoreFollowers = true
+
+    init(networkManager: NetworkManagerProtocol = NetworkManager.shared) {
+        self.networkManager = networkManager
+    }
 
     func getFollowers(username: String) async {
         do {
-            self.followers = try await networkManager.getFollowers(for: username, page: 1)
+            page += 1
+            
+            let followers = try await networkManager.getFollowers(for: username, page: page)
+            if followers.count < 100  { self.hasMoreFollowers = false }
+            self.followers.append(contentsOf: followers)
         } catch {
             self.error = error.localizedDescription
         }
     }
-
 
 }
