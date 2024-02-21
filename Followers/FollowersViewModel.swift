@@ -13,11 +13,9 @@ final class FollowersViewModel {
     var followers: [Follower] = []
     var error: String?
 
-
     func getFollowers(username: String) async {
         do {
             self.followers = try await networkManager.getFollowers(for: username, page: 1)
-            print("followers.count \(followers.count)")
         } catch {
             self.error = error.localizedDescription
         }
