@@ -7,7 +7,8 @@
 
 import Foundation
 
-struct Follower {
+struct Follower: Identifiable {
+    var id: Int
     var login: String
     var avatarUrl: String
 }
