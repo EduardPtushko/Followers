@@ -12,7 +12,8 @@ struct SearchView: View {
     @FocusState private var focusedField: Bool
     @State private var path = NavigationPath()
     @State private var showingAlert = false
-    
+
+
     var isUsernameEntered: Bool { !text.isEmpty }
 
     var body: some View {
@@ -61,14 +62,29 @@ struct SearchView: View {
                     .onTapGesture {
                         focusedField = false
                 }
+//
+//                if showingAlert {
+//                    AlertView(alertTitle: "Empty Username", message: "Please enter a username. We need to know who to look for.", buttonTitle: "Ok") {
+//                            showingAlert = false
+//
+//                    }
+//
+//                }
+            }
 
-                if showingAlert {
-                    AlertView(alertTitle: "Empty Username", message: "Please enter a username. We need to know who to look for.", buttonTitle: "Ok") {
-                            showingAlert = false
+        }
+        .overlay (
+            alertView
+        )
 
-                    }
+    }
 
-                }
+    @ViewBuilder
+    private var alertView: some View {
+        if showingAlert {
+            AlertView(isPresenting: $showingAlert, alertTitle: "Empty Username", message: "Please enter a username. We need to know who to look for.", buttonTitle: "Ok") {
+                showingAlert = false
+
             }
         }
     }
@@ -76,4 +92,19 @@ struct SearchView: View {
 
 #Preview {
     SearchView()
+}
+
+
+struct ShowViewModifier<Cover: View>: ViewModifier {
+    let show: Bool
+    let cover: () -> Cover
+
+    func body(content: Content) -> some View {
+        ZStack(alignment: .top) {
+            content
+            if self.show {
+                cover()
+            }
+        }
+    }
 }

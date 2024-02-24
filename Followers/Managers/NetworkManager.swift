@@ -42,5 +42,27 @@ class NetworkManager: NetworkManagerProtocol {
             throw NetworkError.invalidData
         }
     }
+
+    func getUserInfo(for username: String) async throws -> User {
+        let endpoint = baseURL + "\(username)"
+
+        guard let url = URL(string: endpoint) else {
+            throw NetworkError.invalidUsername
+        }
+
+        guard let (data, response) = try await URLSession.shared.data(from: url) as? (Data, HTTPURLResponse), validStatus.contains(response.statusCode) else {
+            throw NetworkError.invalidResponse
+        }
+
+        do {
+            let decoder = JSONDecoder()
+            decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+            let user = try decoder.decode(User.self, from: data)
+            return user
+        } catch {
+            throw NetworkError.invalidData
+        }
+    }
 }
 

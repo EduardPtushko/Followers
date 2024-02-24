@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AlertView: View {
+    @Binding var isPresenting: Bool
     var alertTitle: String = "Something went wrong"
     var message: String = "Unable to complete request"
     var buttonTitle: String = "OK"
@@ -17,8 +18,8 @@ struct AlertView: View {
     var body: some View {
         ZStack {
             Color.black
-                .opacity(0.75)
-                .ignoresSafeArea()
+                    .opacity(0.75)
+                    .ignoresSafeArea()
 
             RoundedRectangle(cornerRadius: 16)
                 .stroke(lineWidth: 2)
@@ -52,6 +53,6 @@ struct AlertView: View {
     }
 }
 
-#Preview {
-    AlertView(alertTitle: "Empty Username", message: "Please enter a username. We need to know who to look for.", buttonTitle: "Ok", action: {})
-}
+//#Preview {
+//    AlertView(alertTitle: "Empty Username", message: "Please enter a username. We need to know who to look for.", buttonTitle: "Ok", action: {})
+//}
