@@ -36,6 +36,7 @@ struct AlertView: View {
                         Spacer()
                         Text(message)
                             .gfBodyLabel()
+                            .multilineTextAlignment(.center)
                             .padding(.horizontal, padding)
                             .padding(.top, 8)
                         Spacer()

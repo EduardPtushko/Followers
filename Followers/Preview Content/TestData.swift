@@ -212,3 +212,41 @@ let testDataFollowers: Data = """
   }
 ]
 """.data(using: .utf8)!
+
+
+let testUser: Data = """
+{
+  "login": "goz",
+  "id": 20762,
+  "node_id": "MDQ6VXNlcjIwNzYy",
+  "avatar_url": "https://avatars.githubusercontent.com/u/20762?v=4",
+  "gravatar_id": "",
+  "url": "https://api.github.com/users/goz",
+  "html_url": "https://github.com/goz",
+  "followers_url": "https://api.github.com/users/goz/followers",
+  "following_url": "https://api.github.com/users/goz/following{/other_user}",
+  "gists_url": "https://api.github.com/users/goz/gists{/gist_id}",
+  "starred_url": "https://api.github.com/users/goz/starred{/owner}{/repo}",
+  "subscriptions_url": "https://api.github.com/users/goz/subscriptions",
+  "organizations_url": "https://api.github.com/users/goz/orgs",
+  "repos_url": "https://api.github.com/users/goz/repos",
+  "events_url": "https://api.github.com/users/goz/events{/privacy}",
+  "received_events_url": "https://api.github.com/users/goz/received_events",
+  "type": "User",
+  "site_admin": false,
+  "name": "Ahmad Gozali",
+  "company": null,
+  "blog": "goza.li",
+  "location": "Singapore",
+  "email": null,
+  "hireable": null,
+  "bio": "Know very little except how to google",
+  "twitter_username": null,
+  "public_repos": 85,
+  "public_gists": 28,
+  "followers": 134,
+  "following": 64,
+  "created_at": "2008-08-15T08:05:36Z",
+  "updated_at": "2024-02-19T14:24:14Z"
+}
+""".data(using: .utf8)!

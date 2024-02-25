@@ -14,8 +14,8 @@ struct GFTitleLabel: View {
 
     var body: some View {
         Text(text)
-            .truncationMode(.tail)
             .font(.system(size: fontSize, weight: .bold))
+            .truncationMode(.tail)
             .minimumScaleFactor(0.90)
             .multilineTextAlignment(textAlignment)
     }

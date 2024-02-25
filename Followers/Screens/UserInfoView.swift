@@ -13,13 +13,27 @@ struct UserInfoView: View {
     var dismiss
     @State private var isAlertPresented = false
     @State private var errorMessage = ""
+    @State private var user: User?
+
 
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack {
-                    Text(username)
+                    if let user {
+                        UserInfoHeaderView(user: user)
+
+                        RepoItemView(user: user)
+                            .padding(.horizontal)
+
+                        FollowerItemView(user: user)
+                            .padding(.horizontal)
+
+                        Text("Github since \(user.createdAt.convertToDisplayFormat())")
+                    }
+                    Spacer()
                 }
+
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button {
@@ -28,10 +42,7 @@ struct UserInfoView: View {
                             Text("Cancel")
                         }
                     }
-                    ToolbarItem(placement: .principal) {
-                        Text("")
-                            .bold()
-                    }
+
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
                              dismiss()
@@ -41,16 +52,15 @@ struct UserInfoView: View {
                     }
             }
                 if isAlertPresented {
-//                    AlertView(alertTitle: "Something went wrong", message: errorMessage) {
-//
-//                    }
+
                 }
             }
         }
         .task {
             do {
               let user = try await NetworkManager.shared.getUserInfo(for: username)
-                print(user)
+                self.user = user
+
             } catch {
                 isAlertPresented = true
                 errorMessage = error.localizedDescription
@@ -60,5 +70,5 @@ struct UserInfoView: View {
 }
 
 #Preview {
-    UserInfoView(username: "apple")
+    UserInfoView(username: "goz")
 }

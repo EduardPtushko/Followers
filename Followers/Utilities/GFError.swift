@@ -1,12 +1,11 @@
 //
-//  ErrorMessage.swift
+//  GFError.swift
 //  Followers
 //
-//  Created by Eduard Ptushko on 20.02.2024.
+//  Created by Eduard Ptushko on 24.02.2024.
 //
 
 import Foundation
-
 
 enum NetworkError: Error {
     case invalidUsername

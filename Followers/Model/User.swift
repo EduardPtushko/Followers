@@ -13,12 +13,23 @@ struct User {
     var name: String?
     var location: String?
     var bio: String?
-    var publicRepos: Int
-    var publicGists: Int
-    var htmlUrl: String
-    var following: Int
-    var followers: Int
-    var createdAt: String
+    let publicRepos: Int
+    let publicGists: Int
+    let htmlUrl: String
+    let following: Int
+    let followers: Int
+    let createdAt: String
 }
 
 extension User: Codable {}
+
+extension User {
+    static var sampleUser: User {
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+
+        let user = try! decoder.decode(User.self, from: testUser)
+
+        return user
+    }
+}

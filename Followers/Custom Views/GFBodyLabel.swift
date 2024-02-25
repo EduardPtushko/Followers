@@ -15,7 +15,6 @@ struct GFBodyLabel: View {
             .font(.body)
             .foregroundStyle(.secondary)
             .minimumScaleFactor(0.75)
-            .multilineTextAlignment(.center)
     }
 }
 
@@ -29,7 +28,7 @@ struct BodyLabelModifier: ViewModifier {
             .font(.body)
             .foregroundStyle(.secondary)
             .minimumScaleFactor(0.75)
-            .multilineTextAlignment(.center)
+           
     }
 }
 
