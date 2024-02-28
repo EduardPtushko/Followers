@@ -18,7 +18,7 @@ struct User {
     let htmlUrl: String
     let following: Int
     let followers: Int
-    let createdAt: String
+    let createdAt: Date
 }
 
 extension User: Codable {}
@@ -27,6 +27,7 @@ extension User {
     static var sampleUser: User {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        decoder.dateDecodingStrategy = .iso8601
 
         let user = try! decoder.decode(User.self, from: testUser)
 

@@ -5,6 +5,7 @@
 //  Created by Eduard Ptushko on 24.02.2024.
 //
 
+import SafariServices
 import SwiftUI
 
 struct UserInfoView: View {
@@ -15,6 +16,9 @@ struct UserInfoView: View {
     @State private var errorMessage = ""
     @State private var user: User?
 
+    @State private var isPresentWebView = false
+
+    var action: () -> Void
 
     var body: some View {
         NavigationStack {
@@ -23,42 +27,42 @@ struct UserInfoView: View {
                     if let user {
                         UserInfoHeaderView(user: user)
 
-                        RepoItemView(user: user)
-                            .padding(.horizontal)
+                        RepoItemView(user: user) {
+                            isPresentWebView = true
+                        }
+                        .padding(.horizontal)
 
-                        FollowerItemView(user: user)
-                            .padding(.horizontal)
+                        FollowerItemView(user: user) {
+                            action()
+                        }
+                        .padding(.horizontal)
 
-                        Text("Github since \(user.createdAt.convertToDisplayFormat())")
+                        Text("Github since \(user.createdAt.convertToMonthYearFormat())")
                     }
                     Spacer()
                 }
 
                 .toolbar {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button {
-                              dismiss()
-                        } label: {
-                            Text("Cancel")
-                        }
-                    }
-
                     ToolbarItem(placement: .topBarTrailing) {
                         Button {
-                             dismiss()
+                            dismiss()
                         } label: {
                             Text("Done")
                         }
+                        .tint(.green)
                     }
-            }
-                if isAlertPresented {
-
                 }
+                if isAlertPresented {}
             }
         }
+        .fullScreenCover(isPresented: $isPresentWebView, content: {
+            if let user {
+                SFSafariWebView(url: URL(string: user.htmlUrl)!)
+            }
+        })
         .task {
             do {
-              let user = try await NetworkManager.shared.getUserInfo(for: username)
+                let user = try await NetworkManager.shared.getUserInfo(for: username)
                 self.user = user
 
             } catch {
@@ -70,5 +74,5 @@ struct UserInfoView: View {
 }
 
 #Preview {
-    UserInfoView(username: "goz")
+    UserInfoView(username: "goz", action: {})
 }

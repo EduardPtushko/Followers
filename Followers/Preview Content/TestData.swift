@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 let testDataFollowers: Data = """
 [
   {
@@ -212,7 +211,6 @@ let testDataFollowers: Data = """
   }
 ]
 """.data(using: .utf8)!
-
 
 let testUser: Data = """
 {

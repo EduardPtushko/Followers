@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AvatarImageView: View {
     let cache = NetworkManager.shared.cache
-    @State private var image: Image = Image(.avatarPlaceholder)
+    @State private var image: Image = .init(.avatarPlaceholder)
     let urlSting: String
 
     var body: some View {
@@ -31,7 +31,7 @@ struct AvatarImageView: View {
         }
         guard let url = URL(string: urlString) else { return }
 
-        guard  let (data, response) = try? await URLSession.shared.data(from: url) as? (Data, HTTPURLResponse), response.statusCode == 200 else {
+        guard let (data, response) = try? await URLSession.shared.data(from: url) as? (Data, HTTPURLResponse), response.statusCode == 200 else {
             return
         }
 

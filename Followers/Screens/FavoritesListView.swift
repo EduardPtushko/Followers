@@ -8,8 +8,55 @@
 import SwiftUI
 
 struct FavoritesListView: View {
+    @State private var viewModel = FavoritesViewModel()
+
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            if viewModel.favorites.isEmpty {
+                EmptyStateView(message: "No Favorites?\nAdd one on the follower screen")
+                    .navigationTitle("Favorites")
+            } else {
+                List {
+                    ForEach(viewModel.favorites) { favorite in
+                        NavigationLink(value: favorite) {
+                            HStack {
+                                AsyncImage(url: URL(string: favorite.avatarUrl)) { image in
+                                    image.resizable()
+                                } placeholder: {
+                                    Images.placeholder.resizable()
+                                }
+                                .scaledToFit()
+                                .frame(width: 60, height: 60)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+
+                                TitleLabel(textAlignment: .leading, fontSize: 28, text: favorite.login)
+                                    .padding(.leading)
+                            }
+                        }
+                    }
+                    .onDelete(perform: { indexSet in
+                        viewModel.deleteFavorite(offsets: indexSet)
+                    })
+                }
+                .listStyle(.plain)
+                .navigationTitle("Favorites")
+                .navigationDestination(for: Follower.self) { favorite in
+                    FollowerListView(username: favorite.login)
+                }
+                .onAppear {
+                    print("appear")
+                    viewModel.getFavorites()
+                }
+            }
+        }
+//        .customAlert(viewModel.alertTitle, isPresented: $viewModel.isDisplayingAlert, actionText: "Ok", action: {
+//            viewModel.isDisplayingAlert = false
+//        }, message: {
+//            BodyLabel(title: viewModel.lastAlertMessage)
+//        })
+        .onAppear {
+            viewModel.getFavorites()
+        }
     }
 }
 

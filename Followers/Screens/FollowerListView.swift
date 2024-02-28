@@ -8,59 +8,62 @@
 import SwiftUI
 
 struct FollowerListView: View {
-    let username: String
+    @State var username: String
     @State private var viewModel = FollowersViewModel()
-    private var showingAlert: Bool {
-        
-        viewModel.error != nil
-        
-    }
 
     @State private var presentedUser: String?
-
-
     @State private var updating: CGFloat = .zero
-    @Environment(\.isSearching) var isSearching
-    @Environment(\.dismissSearch) var dismissSearch
+
     let columns: [GridItem] = [.init(), .init(), .init()]
 
+    init(username: String) {
+        _username = State(wrappedValue: username)
+    }
+
     var body: some View {
-            ZStack {
-                if viewModel.isEmptyView {
-                    GFEmptyStateView(message: "This user doesn't have any followers. Go follow them.")
-                } else {
-                    gridView
-                        .searchable(text: $viewModel.searchText, prompt: "Search for a username")
-                        .onChange(of: viewModel.searchText, { oldValue, newValue in
-                           
-                        })
-                }
-
-                if viewModel.isLoading {
-                    LoadingView()
-                        .background(Color(.systemBackground)
-                        .opacity(viewModel.isLoading ? 0 : 0.8))
-                        .animation(.easeInOut(duration: 0.5), value: viewModel.isLoading)
-
-                }
-
-                if showingAlert {
-//                    AlertView(alertTitle: "Empty Username", message: "Please enter a username. We need to know who to look for.", buttonTitle: "Ok") {
-//                        viewModel.error = nil
-//                    }
-                }
+        ZStack {
+            switch viewModel.viewState {
+            case .loading:
+                LoadingView()
+            case .emptyState:
+                EmptyStateView(message: "This user doesn't have any followers. Go follow them.")
+            case .gridView:
+                gridView
+                    .searchable(text: $viewModel.searchText, prompt: "Search for a username")
+            case .empty:
+                EmptyView()
             }
-           
-            .sheet(item: $presentedUser, content: { username in
-                UserInfoView(username: username)
-            })
-            .onSubmit(of: .search) {
-                print("hi searcg")
-            }
-            .task {
-                await viewModel.getFollowers(username: username)
         }
 
+        .navigationTitle(username)
+        .task {
+            await viewModel.getFollowers(username: username)
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    viewModel.addFavorite(username: username)
+                } label: {
+                    Image(systemName: "plus")
+                }
+                .tint(.green)
+            }
+        }
+        .customAlert(viewModel.alertTitle, isPresented: $viewModel.isDisplayingAlert, actionText: "Ok", action: {
+            viewModel.isDisplayingAlert = false
+        }, message: {
+            BodyLabel(title: viewModel.lastAlertMessage)
+        })
+        .sheet(item: $presentedUser, content: { username in
+            UserInfoView(username: username) {
+                Task {
+                    viewModel.reset()
+                    await viewModel.getFollowers(username: username)
+                    self.username = username
+                    presentedUser = nil
+                }
+            }
+        })
     }
 }
 
@@ -81,19 +84,16 @@ extension FollowerListView {
                         presentedUser = follower.login
                     }
                     .padding(.top, 12)
-
                     .onAppear {
                         guard viewModel.hasMoreFollowers else { return }
-                        if  follower == viewModel.followers.last {
+
+                        if follower == viewModel.followers.last {
                             Task {
-                                print("hi")
                                 await viewModel.getFollowers(username: username)
                             }
                         }
                     }
-
                 }
-
             }
             .padding()
         }
@@ -101,9 +101,9 @@ extension FollowerListView {
 }
 
 #Preview {
-//    FollowerListView(username: "EduardPtushko")
     NavigationStack {
         FollowerListView(username: "SAllen0400")
     }
 }
+
 extension String: Identifiable { public var id: String { self } }

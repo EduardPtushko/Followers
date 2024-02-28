@@ -1,5 +1,5 @@
 //
-//  GFTextField.swift
+//  CustomTextField.swift
 //  Followers
 //
 //  Created by Eduard Ptushko on 13.01.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GFTextField: View {
+struct CustomTextField: View {
     @Binding var text: String
 
     var body: some View {
@@ -17,7 +17,7 @@ struct GFTextField: View {
             .multilineTextAlignment(.center)
             .padding(8)
             .background(Color(UIColor.tertiarySystemBackground))
-            .overlay (
+            .overlay(
                 RoundedRectangle(cornerRadius: 10)
                     .stroke(Color(UIColor.systemGray4), lineWidth: 2)
             )
@@ -27,5 +27,5 @@ struct GFTextField: View {
 #Preview {
     @State var text: String = ""
 
-    return  GFTextField(text: $text)
+    return CustomTextField(text: $text)
 }

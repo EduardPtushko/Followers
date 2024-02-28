@@ -1,5 +1,5 @@
 //
-//  GFBodyLabel.swift
+//  BodyLabel.swift
 //  Followers
 //
 //  Created by Eduard Ptushko on 16.02.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GFBodyLabel: View {
+struct BodyLabel: View {
     let title: String
 
     var body: some View {
@@ -19,7 +19,7 @@ struct GFBodyLabel: View {
 }
 
 #Preview {
-    GFBodyLabel(title: "Empty Username")
+    BodyLabel(title: "Empty Username")
 }
 
 struct BodyLabelModifier: ViewModifier {
@@ -28,7 +28,6 @@ struct BodyLabelModifier: ViewModifier {
             .font(.body)
             .foregroundStyle(.secondary)
             .minimumScaleFactor(0.75)
-           
     }
 }
 

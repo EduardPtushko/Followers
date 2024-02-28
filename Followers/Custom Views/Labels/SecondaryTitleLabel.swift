@@ -1,5 +1,5 @@
 //
-//  GFSecondaryTitleLabel.swift
+//  SecondaryTitleLabel.swift
 //  Followers
 //
 //  Created by Eduard Ptushko on 24.02.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GFSecondaryTitleLabel: View {
+struct SecondaryTitleLabel: View {
     let title: String
     let fontSize: CGFloat
 
@@ -17,10 +17,9 @@ struct GFSecondaryTitleLabel: View {
             .foregroundStyle(Color.secondary)
             .truncationMode(.tail)
             .minimumScaleFactor(0.90)
-
     }
 }
 
 #Preview {
-    GFSecondaryTitleLabel(title: "Singapore", fontSize: 18)
+    SecondaryTitleLabel(title: "Singapore", fontSize: 18)
 }

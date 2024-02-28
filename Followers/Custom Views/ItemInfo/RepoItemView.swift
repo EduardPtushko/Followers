@@ -15,13 +15,13 @@ enum ItemInfoType {
 
     var count: String {
         switch self {
-        case .repos(let int):
+        case let .repos(int):
             return String(int)
-        case .gists(let int):
+        case let .gists(int):
             return String(int)
-        case .followers(let int):
+        case let .followers(int):
             return String(int)
-        case .following(let int):
+        case let .following(int):
             return String(int)
         }
     }
@@ -37,44 +37,46 @@ enum ItemInfoType {
 
     var image: Image {
         switch self {
-        case .repos: 
-            return Image(systemName: SFSymbols.repos)
+        case .repos:
+            return SFSymbols.repos
         case .gists:
-            return Image(systemName: SFSymbols.gists)
+            return SFSymbols.gists
         case .followers:
-            return Image(systemName: SFSymbols.followers)
+            return SFSymbols.followers
         case .following:
-           return Image(systemName: SFSymbols.following)
+            return SFSymbols.following
         }
     }
 }
 
 struct RepoItemView: View {
     let user: User
-    
+    var action: () -> Void
+
     var body: some View {
         VStack(spacing: 16) {
-                HStack {
-                    ItemInfoView(itemInfoType: .repos(user.publicRepos))
-                    Spacer()
-                    ItemInfoView(itemInfoType: .gists(user.publicGists))
-                }
-                .frame(height: 50)
-                .padding(.horizontal)
-                .padding(.top)
-
-                GFButton(backgroundColor: .purple, title: "Github Profile") {
-                }
-                .frame(height: 44)
-                .padding(.horizontal)
-                .padding(.bottom)
+            HStack {
+                ItemInfoView(itemInfoType: .repos(user.publicRepos))
+                Spacer()
+                ItemInfoView(itemInfoType: .gists(user.publicGists))
             }
-            .background(Color(.secondarySystemBackground))
-            .padding()
-            .clipShape(RoundedRectangle(cornerRadius: 18))
+            .frame(height: 50)
+            .padding(.horizontal)
+            .padding(.top)
+
+            CustomButton(backgroundColor: .purple, title: "Github Profile") {
+                action()
+            }
+            .frame(height: 44)
+            .padding(.horizontal)
+            .padding(.bottom)
+        }
+        .background(Color(.secondarySystemBackground))
+        .padding()
+        .clipShape(RoundedRectangle(cornerRadius: 18))
     }
 }
 
 #Preview {
-    RepoItemView(user: User.sampleUser)
+    RepoItemView(user: User.sampleUser, action: {})
 }

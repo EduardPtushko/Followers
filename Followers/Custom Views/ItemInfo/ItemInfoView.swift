@@ -16,10 +16,10 @@ struct ItemInfoView: View {
                 itemInfoType.image
                     .frame(width: 20, height: 20)
 
-                GFTitleLabel(textAlignment: .leading, fontSize: 14, text: itemInfoType.text)
+                TitleLabel(textAlignment: .leading, fontSize: 14, text: itemInfoType.text)
             }
 
-            GFTitleLabel(textAlignment: .leading, fontSize: 14, text: itemInfoType.count)
+            TitleLabel(textAlignment: .leading, fontSize: 14, text: itemInfoType.count)
         }
     }
 }

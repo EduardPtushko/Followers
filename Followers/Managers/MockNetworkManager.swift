@@ -8,9 +8,8 @@
 import Foundation
 
 class MockNetworkManager: NetworkManagerProtocol {
-
-    func getFollowers(for username: String, page: Int) async throws -> [Follower] {
-       try await Task.sleep(nanoseconds: 2_000_000_000)
+    func getFollowers(for _: String, page _: Int) async throws -> [Follower] {
+        try await Task.sleep(nanoseconds: 2000000000)
 
         do {
             let decoder = JSONDecoder()
@@ -20,8 +19,7 @@ class MockNetworkManager: NetworkManagerProtocol {
 
             return followers
         } catch {
-            throw NetworkError.invalidData
+            throw FollowersError.invalidData
         }
     }
-
 }

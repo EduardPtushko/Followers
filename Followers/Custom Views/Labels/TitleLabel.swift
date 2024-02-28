@@ -1,5 +1,5 @@
 //
-//  GFTitleLabel.swift
+//  TitleLabel.swift
 //  Followers
 //
 //  Created by Eduard Ptushko on 16.02.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct GFTitleLabel: View {
+struct TitleLabel: View {
     let textAlignment: TextAlignment
     let fontSize: CGFloat
     let text: String
@@ -22,13 +22,13 @@ struct GFTitleLabel: View {
 }
 
 #Preview {
-    GFTitleLabel(textAlignment: .center, fontSize: 20, text: "Empty Username")
+    TitleLabel(textAlignment: .center, fontSize: 20, text: "Empty Username")
 }
 
 struct TitleLabelModifier: ViewModifier {
     let textAlignment: TextAlignment
     let fontSize: CGFloat
-    
+
     func body(content: Content) -> some View {
         content
             .truncationMode(.tail)

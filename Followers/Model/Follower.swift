@@ -7,11 +7,14 @@
 
 import Foundation
 
-struct Follower: Identifiable {
-    var id: Int
+struct Follower {
     var login: String
     var avatarUrl: String
 }
 
 extension Follower: Codable {}
+extension Follower: Hashable {}
 extension Follower: Equatable {}
+extension Follower: Identifiable {
+    var id: String { login }
+}

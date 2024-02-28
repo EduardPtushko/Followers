@@ -9,6 +9,8 @@ import SwiftUI
 
 struct FollowerItemView: View {
     let user: User
+    var action: () -> Void
+
     var body: some View {
         VStack(spacing: 16) {
             HStack {
@@ -19,9 +21,9 @@ struct FollowerItemView: View {
             .frame(minHeight: 50)
             .padding(.horizontal)
             .padding(.top)
-            
-            GFButton(backgroundColor: .green, title: "Get Followers") {
 
+            CustomButton(backgroundColor: .green, title: "Get Followers") {
+                action()
             }
             .frame(height: 44)
             .padding(.horizontal)
@@ -34,5 +36,5 @@ struct FollowerItemView: View {
 }
 
 #Preview {
-    FollowerItemView(user: User.sampleUser)
+    FollowerItemView(user: User.sampleUser, action: {})
 }
