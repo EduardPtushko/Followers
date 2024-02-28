@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct AvatarImageView: View {
-    let cache = NetworkManager.shared.cache
+    let cache = ImageCache.shared
     @State private var image: Image = .init(.avatarPlaceholder)
     let urlSting: String
 
@@ -23,9 +23,7 @@ struct AvatarImageView: View {
     }
 
     func getAvatarImage(from urlString: String) async {
-        let cacheKey = NSString(string: urlString)
-
-        if let image = cache.object(forKey: cacheKey) {
+        if let image = cache.get(key: urlSting) {
             self.image = Image(uiImage: image)
             return
         }
@@ -37,7 +35,7 @@ struct AvatarImageView: View {
 
         guard let uiImage = UIImage(data: data) else { return }
 
-        cache.setObject(uiImage, forKey: cacheKey)
+        cache.set(uiImage, key: urlString)
         image = Image(uiImage: uiImage)
     }
 }

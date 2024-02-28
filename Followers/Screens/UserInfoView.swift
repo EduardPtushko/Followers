@@ -9,12 +9,12 @@ import SafariServices
 import SwiftUI
 
 struct UserInfoView: View {
+    @State private var viewModel = UserInfoViewModel()
     let username: String
     @Environment(\.dismiss)
     var dismiss
     @State private var isAlertPresented = false
     @State private var errorMessage = ""
-    @State private var user: User?
 
     @State private var isPresentWebView = false
 
@@ -24,7 +24,7 @@ struct UserInfoView: View {
         NavigationStack {
             ZStack {
                 VStack {
-                    if let user {
+                    if let user = viewModel.user {
                         UserInfoHeaderView(user: user)
 
                         RepoItemView(user: user) {
@@ -56,19 +56,12 @@ struct UserInfoView: View {
             }
         }
         .fullScreenCover(isPresented: $isPresentWebView, content: {
-            if let user {
+            if let user = viewModel.user {
                 SFSafariWebView(url: URL(string: user.htmlUrl)!)
             }
         })
         .task {
-            do {
-                let user = try await NetworkManager.shared.getUserInfo(for: username)
-                self.user = user
-
-            } catch {
-                isAlertPresented = true
-                errorMessage = error.localizedDescription
-            }
+            await viewModel.getUser(username: username)
         }
     }
 }

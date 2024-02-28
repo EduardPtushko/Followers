@@ -34,7 +34,7 @@ final class FollowersViewModel {
         }
     }
 
-    init(networkManager: NetworkManagerProtocol = NetworkManager.shared) {
+    init(networkManager: NetworkManagerProtocol = NetworkManager()) {
         self.networkManager = networkManager
     }
 
@@ -62,7 +62,7 @@ final class FollowersViewModel {
     func addFavorite(username: String) {
         Task {
             do {
-                let user = try await NetworkManager.shared.getUserInfo(for: username)
+                let user = try await networkManager.getUserInfo(for: username)
                 let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
                 try PersistenceManager.updateWith(favorite: favorite, actionType: .add)
 

@@ -11,15 +11,11 @@ let validStatus = 200...299
 
 protocol NetworkManagerProtocol {
     func getFollowers(for username: String, page: Int) async throws -> [Follower]
+    func getUserInfo(for username: String) async throws -> User
 }
 
 actor NetworkManager: NetworkManagerProtocol {
-    static var shared = NetworkManager()
-    let cache = NSCache<NSString, UIImage>()
-
     let baseURL = "https://api.github.com/users/"
-
-    private init() {}
 
     func getFollowers(for username: String, page: Int) async throws -> [Follower] {
         let endpoint = baseURL + "\(username)/followers?per_page=100&page=\(page)"

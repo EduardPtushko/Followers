@@ -44,6 +44,7 @@
 		D3CE8C382B89E94E004AA8F6 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CE8C372B89E94E004AA8F6 /* EmptyStateView.swift */; };
 		D3CE8C3E2B8A3C59004AA8F6 /* UserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CE8C3D2B8A3C59004AA8F6 /* UserInfoView.swift */; };
 		D3CE8C402B8A3D55004AA8F6 /* UserInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3CE8C3F2B8A3D55004AA8F6 /* UserInfoViewModel.swift */; };
+		D3D8B4592B8F9A29004AF1B9 /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D8B4582B8F9A29004AF1B9 /* ImageCache.swift */; };
 		D3F8B8492B5837C10083B040 /* FollowerListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8B8482B5837C10083B040 /* FollowerListView.swift */; };
 /* End PBXBuildFile section */
 
@@ -97,6 +98,7 @@
 		D3CE8C372B89E94E004AA8F6 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		D3CE8C3D2B8A3C59004AA8F6 /* UserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoView.swift; sourceTree = "<group>"; };
 		D3CE8C3F2B8A3D55004AA8F6 /* UserInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoViewModel.swift; sourceTree = "<group>"; };
+		D3D8B4582B8F9A29004AF1B9 /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
 		D3F8B8482B5837C10083B040 /* FollowerListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FollowerListView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +161,7 @@
 			children = (
 				D3C4740B2B821D0500923160 /* App */,
 				D32FC56E2B526C06009A8597 /* ContentView.swift */,
+				D3D8B4572B8F9A0E004AF1B9 /* Cache */,
 				D3C4740C2B821D4A00923160 /* Custom Views */,
 				D321C7542B7FD12500FD912A /* Extensions */,
 				D3C474022B82152000923160 /* Managers */,
@@ -300,6 +303,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		D3D8B4572B8F9A0E004AF1B9 /* Cache */ = {
+			isa = PBXGroup;
+			children = (
+				D3D8B4582B8F9A29004AF1B9 /* ImageCache.swift */,
+			);
+			path = Cache;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -405,6 +416,7 @@
 				D305243E2B8A78FC00201548 /* UserInfoHeaderView.swift in Sources */,
 				D3F8B8492B5837C10083B040 /* FollowerListView.swift in Sources */,
 				D32FC57D2B526C64009A8597 /* FavoritesListView.swift in Sources */,
+				D3D8B4592B8F9A29004AF1B9 /* ImageCache.swift in Sources */,
 				D32FC57F2B526C7A009A8597 /* CustomButton.swift in Sources */,
 				D3C474042B82153000923160 /* NetworkManager.swift in Sources */,
 				D305243C2B8A78CE00201548 /* Constants.swift in Sources */,

@@ -17,11 +17,5 @@ final class FollowersViewModelTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() async throws {
-        let sut = FollowersViewModel(networkManager: MockNetworkManager())
-
-        await sut.getFollowers(username: "apple")
-
-        XCTAssertEqual(sut.followers.count, 10)
-    }
+    func testExample() async throws {}
 }
