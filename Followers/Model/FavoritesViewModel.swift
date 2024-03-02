@@ -19,6 +19,7 @@ final class FavoritesViewModel {
     var isDisplayingAlert = false
     var alertTitle = "Something went wrong"
 
+    @MainActor
     func getFavorites() {
         do {
             let favorites = try PersistenceManager.retrieveFavorites()
@@ -29,12 +30,12 @@ final class FavoritesViewModel {
         }
     }
 
+    @MainActor
     func deleteFavorite(offsets: IndexSet) {
         do {
             for index in offsets {
                 try PersistenceManager.updateWith(favorite: favorites[index], actionType: .remove)
             }
-
             favorites.remove(atOffsets: offsets)
         } catch {
             lastAlertMessage = lastAlertMessage

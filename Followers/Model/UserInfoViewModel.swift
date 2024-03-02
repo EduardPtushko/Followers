@@ -9,7 +9,7 @@ import Foundation
 
 @Observable
 final class UserInfoViewModel {
-    let networkManager: NetworkManagerProtocol
+    @ObservationIgnored let networkManager: NetworkManagerProtocol
     var user: User?
     var lastAlertMessage = "None" {
         didSet {
@@ -24,6 +24,7 @@ final class UserInfoViewModel {
         self.networkManager = networkManager
     }
 
+    @MainActor
     func getUser(username: String) async {
         do {
             let user = try await networkManager.getUserInfo(for: username)

@@ -9,7 +9,7 @@ import SwiftUI
 
 @Observable
 final class FollowersViewModel {
-    let networkManager: NetworkManagerProtocol
+    @ObservationIgnored let networkManager: NetworkManagerProtocol
     var followers: [Follower] = []
     var page = 0
     var hasMoreFollowers = true
@@ -38,6 +38,7 @@ final class FollowersViewModel {
         self.networkManager = networkManager
     }
 
+    @MainActor
     func getFollowers(username: String) async {
         viewState = .loading
         do {
@@ -65,16 +66,20 @@ final class FollowersViewModel {
                 let user = try await networkManager.getUserInfo(for: username)
                 let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
                 try PersistenceManager.updateWith(favorite: favorite, actionType: .add)
-
-                lastAlertMessage = "You have successfully favorited this user"
-                alertTitle = "Success!"
+                await MainActor.run {
+                    lastAlertMessage = "You have successfully favorited this user"
+                    alertTitle = "Success!"
+                }
             } catch {
-                lastAlertMessage = error.localizedDescription
-                alertTitle = "Something went wrong"
+                await MainActor.run {
+                    lastAlertMessage = error.localizedDescription
+                    alertTitle = "Something went wrong"
+                }
             }
         }
     }
 
+    @MainActor
     func reset() {
         viewState = .empty
         followers.removeAll()
