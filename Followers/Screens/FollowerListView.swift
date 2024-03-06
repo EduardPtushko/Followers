@@ -57,8 +57,8 @@ struct FollowerListView: View {
         .sheet(item: $presentedUser, content: { username in
             UserInfoView(username: username) {
                 Task {
-                    viewModel.reset()
                     await viewModel.getFollowers(username: username)
+                    viewModel.reset()
                     self.username = username
                     presentedUser = nil
                 }

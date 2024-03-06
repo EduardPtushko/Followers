@@ -39,7 +39,7 @@ struct SearchView: View {
 
                     Spacer()
 
-                    CustomButton(backgroundColor: .green, title: "Get Followers") {
+                    FollowersButton(backgroundColor: .green, title: "Get Followers") {
                         guard isUsernameEntered else {
                             withAnimation {
                                 showingAlert = true

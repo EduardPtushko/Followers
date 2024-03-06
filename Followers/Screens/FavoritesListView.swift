@@ -49,11 +49,6 @@ struct FavoritesListView: View {
                 }
             }
         }
-//        .customAlert(viewModel.alertTitle, isPresented: $viewModel.isDisplayingAlert, actionText: "Ok", action: {
-//            viewModel.isDisplayingAlert = false
-//        }, message: {
-//            BodyLabel(title: viewModel.lastAlertMessage)
-//        })
         .onAppear {
             viewModel.getFavorites()
         }

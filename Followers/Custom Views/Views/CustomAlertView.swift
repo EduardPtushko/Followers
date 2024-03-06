@@ -64,7 +64,7 @@ struct CustomAlertView<M: View>: View {
     }
 
     private var actionButton: some View {
-        CustomButton(backgroundColor: Color.pink, title: actionTextKey, systemName: "checkmark") {
+        FollowersButton(backgroundColor: Color.pink, title: actionTextKey, systemName: "checkmark") {
             dismiss()
             if let action {
                 action()

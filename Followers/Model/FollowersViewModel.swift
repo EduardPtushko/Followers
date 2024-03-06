@@ -55,6 +55,7 @@ final class FollowersViewModel {
 
             viewState = .gridView
         } catch {
+            page -= 1
             viewState = .empty
             lastAlertMessage = error.localizedDescription
         }

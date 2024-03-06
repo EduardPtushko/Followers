@@ -22,7 +22,7 @@ struct FollowerItemView: View {
             .padding(.horizontal)
             .padding(.top)
 
-            CustomButton(backgroundColor: .green, title: "Get Followers") {
+            FollowersButton(backgroundColor: .green, title: "Get Followers") {
                 action()
             }
             .frame(height: 44)

@@ -64,7 +64,7 @@ struct RepoItemView: View {
             .padding(.horizontal)
             .padding(.top)
 
-            CustomButton(backgroundColor: .purple, title: "Github Profile") {
+            FollowersButton(backgroundColor: .purple, title: "Github Profile") {
                 action()
             }
             .frame(height: 44)

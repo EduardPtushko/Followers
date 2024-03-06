@@ -1,5 +1,5 @@
 //
-//  CustomButton.swift
+//  FollowersButton.swift
 //  Followers
 //
 //  Created by Eduard Ptushko on 13.01.2024.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct CustomButton: View {
+struct FollowersButton: View {
     let backgroundColor: Color
     let title: String
     var systemName: String? = nil
@@ -33,7 +33,7 @@ struct CustomButton: View {
 }
 
 #Preview {
-    CustomButton(backgroundColor: .blue, title: "Click me", systemName: "checkmark", action: {})
+    FollowersButton(backgroundColor: .blue, title: "Click me", systemName: "checkmark", action: {})
         .frame(height: 50)
         .padding(.horizontal, 50)
 }
