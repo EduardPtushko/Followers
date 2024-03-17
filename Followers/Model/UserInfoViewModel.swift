@@ -11,14 +11,16 @@ import Foundation
 final class UserInfoViewModel {
     let networkManager: NetworkManagerProtocol
     var user: User?
-    var lastAlertMessage = "None" {
+
+    var followersError: Error? {
         didSet {
-            isDisplayingAlert = true
+            if followersError != nil {
+                showingAlert = true
+            }
         }
     }
 
-    var isDisplayingAlert = false
-    var alertTitle = "Something went wrong"
+    var showingAlert = false
 
     init(networkManager: NetworkManagerProtocol = NetworkManager()) {
         self.networkManager = networkManager
@@ -30,7 +32,7 @@ final class UserInfoViewModel {
             let user = try await networkManager.getUserInfo(for: username)
             self.user = user
         } catch {
-            lastAlertMessage = error.localizedDescription
+            followersError = error
         }
     }
 }

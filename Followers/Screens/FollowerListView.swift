@@ -13,6 +13,7 @@ struct FollowerListView: View {
 
     @State private var presentedUser: String?
     @State private var updating: CGFloat = .zero
+    @State private var hasError = false
 
     let columns: [GridItem] = [.init(), .init(), .init()]
 
@@ -40,6 +41,9 @@ struct FollowerListView: View {
         .task {
             await viewModel.getFollowers(username: username)
         }
+        .onChange(of: viewModel.error) { _, newValue in
+            hasError = newValue != nil
+        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
@@ -50,14 +54,17 @@ struct FollowerListView: View {
                 .tint(.green)
             }
         }
-        .customAlert(viewModel.alertTitle, isPresented: $viewModel.isDisplayingAlert, actionText: "Ok", action: {}, message: {
-            BodyLabel(title: viewModel.lastAlertMessage)
+        .customAlert("Success!", isPresented: $viewModel.showingSuccess, actionText: "Horray!", action: {}, message: {
+            BodyLabel(title: "You have successfully favorited this user")
+        })
+        .customAlert(viewModel.error?.title ?? "Error", isPresented: $hasError, actionText: "Ok", action: {}, message: {
+            BodyLabel(title: viewModel.error?.description ?? "")
         })
         .sheet(item: $presentedUser, content: { username in
             UserInfoView(username: username) {
                 Task {
-                    await viewModel.getFollowers(username: username)
                     viewModel.reset()
+                    await viewModel.getFollowers(username: username)
                     self.username = username
                     presentedUser = nil
                 }

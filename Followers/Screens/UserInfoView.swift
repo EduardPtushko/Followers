@@ -28,7 +28,11 @@ struct UserInfoView: View {
                         UserInfoHeaderView(user: user)
 
                         RepoItemView(user: user) {
-                            isPresentWebView = true
+                            if let url = URL(string: user.htmlUrl) {
+                                isPresentWebView = true
+                            } else {
+                                isAlertPresented = true
+                            }
                         }
                         .padding(.horizontal)
 
@@ -52,9 +56,11 @@ struct UserInfoView: View {
                         .tint(.green)
                     }
                 }
-                if isAlertPresented {}
             }
         }
+        .customAlert("Invalid URL", isPresented: $isAlertPresented, actionText: "Ok", action: {}, message: {
+            Text("The url attached to this user is invalid")
+        })
         .fullScreenCover(isPresented: $isPresentWebView, content: {
             if let user = viewModel.user {
                 SFSafariWebView(url: URL(string: user.htmlUrl)!)

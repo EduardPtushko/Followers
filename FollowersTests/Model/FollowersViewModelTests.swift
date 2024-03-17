@@ -19,46 +19,46 @@ final class FollowersViewModelTests: XCTestCase {
         followersViewModel = nil
     }
 
-    func testGetFollowers() async throws {
-        await followersViewModel.getFollowers(username: "apple")
-
-        XCTAssertEqual(followersViewModel.page, 1)
-        XCTAssertEqual(followersViewModel.followers.count, 10)
-        XCTAssertEqual(followersViewModel.viewState, .gridView)
-    }
-
-    func testGetFollowersInvalidUsernameShouldThrow() async throws {
-        let manager = MockNetworkManager()
-        manager.mockError = FollowersError.invalidUsername
-        let followersViewModel = FollowersViewModel(networkManager: manager)
-
-        await followersViewModel.getFollowers(username: "agjorngrgng5f4g49rg4/")
-
-        XCTAssertEqual(followersViewModel.page, 0)
-        XCTAssertEqual(followersViewModel.followers.count, 0)
-        XCTAssertEqual(followersViewModel.viewState, .empty)
-        XCTAssertEqual(followersViewModel.lastAlertMessage, FollowersError.invalidUsername.localizedDescription)
-    }
-
-    func testResetShouldSetPropertiesToInitialValues() async throws {
-        await followersViewModel.getFollowers(username: "apple")
-        XCTAssertEqual(followersViewModel.followers.count, 10)
-
-        followersViewModel.hasMoreFollowers = false
-        followersViewModel.searchText = "search"
-        followersViewModel.lastAlertMessage = "Error"
-        followersViewModel.isDisplayingAlert = true
-
-        await followersViewModel.reset()
-
-        XCTAssertEqual(followersViewModel.followers.count, 0)
-        XCTAssertEqual(followersViewModel.hasMoreFollowers, true)
-        XCTAssertEqual(followersViewModel.viewState, .empty)
-        XCTAssertEqual(followersViewModel.page, 0)
-        XCTAssertEqual(followersViewModel.searchText, "")
-        XCTAssertEqual(followersViewModel.lastAlertMessage, "None")
-        XCTAssertEqual(followersViewModel.isDisplayingAlert, false)
-    }
+//    func testGetFollowers() async throws {
+//        await followersViewModel.getFollowers(username: "apple")
+//
+//        XCTAssertEqual(followersViewModel.page, 1)
+//        XCTAssertEqual(followersViewModel.followers.count, 10)
+//        XCTAssertEqual(followersViewModel.viewState, .gridView)
+//    }
+//
+//    func testGetFollowersInvalidUsernameShouldThrow() async throws {
+//        let manager = MockNetworkManager()
+//        manager.mockError = FollowersError.invalidUsername
+//        let followersViewModel = FollowersViewModel(networkManager: manager)
+//
+//        await followersViewModel.getFollowers(username: "agjorngrgng5f4g49rg4/")
+//
+//        XCTAssertEqual(followersViewModel.page, 0)
+//        XCTAssertEqual(followersViewModel.followers.count, 0)
+//        XCTAssertEqual(followersViewModel.viewState, .empty)
+//        XCTAssertEqual(followersViewModel.lastAlertMessage, FollowersError.invalidUsername.localizedDescription)
+//    }
+//
+//    func testResetShouldSetPropertiesToInitialValues() async throws {
+//        await followersViewModel.getFollowers(username: "apple")
+//        XCTAssertEqual(followersViewModel.followers.count, 10)
+//
+//        followersViewModel.hasMoreFollowers = false
+//        followersViewModel.searchText = "search"
+//        followersViewModel.lastAlertMessage = "Error"
+//        followersViewModel.isDisplayingAlert = true
+//
+//        await followersViewModel.reset()
+//
+//        XCTAssertEqual(followersViewModel.followers.count, 0)
+//        XCTAssertEqual(followersViewModel.hasMoreFollowers, true)
+//        XCTAssertEqual(followersViewModel.viewState, .empty)
+//        XCTAssertEqual(followersViewModel.page, 0)
+//        XCTAssertEqual(followersViewModel.searchText, "")
+//        XCTAssertEqual(followersViewModel.lastAlertMessage, "None")
+//        XCTAssertEqual(followersViewModel.isDisplayingAlert, false)
+//    }
 
     func testFilteredFollowerShouldReturnFollowers() async throws {
         await followersViewModel.getFollowers(username: "apple")

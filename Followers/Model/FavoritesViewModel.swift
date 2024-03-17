@@ -10,14 +10,15 @@ import SwiftUI
 @Observable
 final class FavoritesViewModel {
     var favorites: [Follower] = []
-    var lastAlertMessage = "None" {
+    var followersError: FollowersError? {
         didSet {
-            isDisplayingAlert = true
+            if followersError != nil {
+                showingAlert = true
+            }
         }
     }
 
-    var isDisplayingAlert = false
-    var alertTitle = "Something went wrong"
+    var showingAlert = false
 
     @MainActor
     func getFavorites() {
@@ -25,8 +26,11 @@ final class FavoritesViewModel {
             let favorites = try PersistenceManager.retrieveFavorites()
             self.favorites = favorites
         } catch {
-            lastAlertMessage = lastAlertMessage
-            alertTitle = "Something went wrong"
+            if let error = error as? FollowersError {
+                followersError = error
+            } else {
+                followersError = .unexpectedError
+            }
         }
     }
 
@@ -38,8 +42,11 @@ final class FavoritesViewModel {
             }
             favorites.remove(atOffsets: offsets)
         } catch {
-            lastAlertMessage = lastAlertMessage
-            alertTitle = "Unable to remove"
+            if let error = error as? FollowersError {
+                followersError = error
+            } else {
+                followersError = .unexpectedError
+            }
         }
     }
 }

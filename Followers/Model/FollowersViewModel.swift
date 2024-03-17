@@ -9,7 +9,7 @@ import SwiftUI
 
 @Observable
 final class FollowersViewModel {
-    enum State {
+    enum State: Equatable {
         case loading
         case loaded(followers: [Follower])
         case error
@@ -20,18 +20,7 @@ final class FollowersViewModel {
     var followers: [Follower] = []
     var page = 0
     var hasMoreFollowers = true
-    var state = State.loading
-
-    var lastAlertMessage = "None" {
-        didSet {
-            isDisplayingAlert = true
-        }
-    }
-
-    var isDisplayingAlert = false
-    var alertTitle = "Something went wrong"
-
-    var searchText = ""
+    var state: State = .loading
 
     var filteredFollowers: [Follower] {
         if searchText.isEmpty {
@@ -40,6 +29,11 @@ final class FollowersViewModel {
             return followers.filter { $0.login.localizedCaseInsensitiveContains(searchText) }
         }
     }
+
+    var error: FollowersError?
+    var showingSuccess = false
+
+    var searchText = ""
 
     init(networkManager: NetworkManagerProtocol = NetworkManager()) {
         self.networkManager = networkManager
@@ -58,8 +52,8 @@ final class FollowersViewModel {
             state = .loaded(followers: followers)
         } catch {
             page -= 1
+            self.error = error as? FollowersError
             state = .error
-            lastAlertMessage = error.localizedDescription
         }
     }
 
@@ -69,15 +63,9 @@ final class FollowersViewModel {
                 let user = try await networkManager.getUserInfo(for: username)
                 let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
                 try PersistenceManager.updateWith(favorite: favorite, actionType: .add)
-                await MainActor.run {
-                    lastAlertMessage = "You have successfully favorited this user"
-                    alertTitle = "Success!"
-                }
+                showingSuccess = true
             } catch {
-                await MainActor.run {
-                    lastAlertMessage = error.localizedDescription
-                    alertTitle = "Something went wrong"
-                }
+                self.error = error as? FollowersError
             }
         }
     }
@@ -89,7 +77,35 @@ final class FollowersViewModel {
         page = 0
         hasMoreFollowers = true
         searchText = ""
-        lastAlertMessage = "None"
-        isDisplayingAlert = false
+        error = nil
     }
 }
+
+// enum FollowersError {
+//    case somethingWrong(error: String)
+//    case success
+//    case emptyUser
+//
+//    var message: String {
+//        switch self {
+//        case let .somethingWrong(error):
+//            error
+//        case .success:
+//            "You have successfully favorited this user"
+//        case .emptyUser:
+//            "Please enter a username. We need to know who to look for."
+//        }
+//    }
+//
+//    var title: String {
+//        switch self {
+//        case .somethingWrong:
+//            "Something went wrong"
+//        case .success:
+//            "Success!"
+//        case .emptyUser:
+//            "Empty User"
+//        }
+//    }
+//
+// }

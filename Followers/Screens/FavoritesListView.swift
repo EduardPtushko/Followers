@@ -44,11 +44,13 @@ struct FavoritesListView: View {
                     FollowerListView(username: favorite.login)
                 }
                 .onAppear {
-                    print("appear")
                     viewModel.getFavorites()
                 }
             }
         }
+        .customAlert(viewModel.followersError?.title ?? "", isPresented: $viewModel.showingAlert, actionText: "Ok", action: {}, message: {
+            Text(viewModel.followersError?.description ?? "")
+        })
         .onAppear {
             viewModel.getFavorites()
         }
