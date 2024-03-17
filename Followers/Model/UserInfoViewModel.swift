@@ -9,7 +9,7 @@ import Foundation
 
 @Observable
 final class UserInfoViewModel {
-    @ObservationIgnored let networkManager: NetworkManagerProtocol
+    let networkManager: NetworkManagerProtocol
     var user: User?
     var lastAlertMessage = "None" {
         didSet {

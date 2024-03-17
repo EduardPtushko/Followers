@@ -65,9 +65,7 @@ struct SearchView: View {
                 }
             }
             .navigationTitle("Search")
-            .customAlert("Empty Username", isPresented: $showingAlert, actionText: "Ok") {
-                showingAlert = false
-            } message: {
+            .customAlert("Empty Username", isPresented: $showingAlert, actionText: "Ok") {} message: {
                 BodyLabel(title: "Please enter a username. We need to know who to look for.")
             }
         }

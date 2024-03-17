@@ -22,19 +22,20 @@ struct FollowerListView: View {
 
     var body: some View {
         ZStack {
-            switch viewModel.viewState {
+            switch viewModel.state {
             case .loading:
                 LoadingView()
-            case .emptyState:
-                EmptyStateView(message: "This user doesn't have any followers. Go follow them.")
-            case .gridView:
-                gridView
-                    .searchable(text: $viewModel.searchText, prompt: "Search for a username")
-            case .empty:
+            case .loaded(let followers):
+                if followers.isEmpty {
+                    EmptyStateView(message: "This user doesn't have any followers. Go follow them.")
+                } else {
+                    gridView
+                        .searchable(text: $viewModel.searchText, prompt: "Search for a username")
+                }
+            case .error:
                 EmptyView()
             }
         }
-
         .navigationTitle(username)
         .task {
             await viewModel.getFollowers(username: username)
@@ -49,9 +50,7 @@ struct FollowerListView: View {
                 .tint(.green)
             }
         }
-        .customAlert(viewModel.alertTitle, isPresented: $viewModel.isDisplayingAlert, actionText: "Ok", action: {
-            viewModel.isDisplayingAlert = false
-        }, message: {
+        .customAlert(viewModel.alertTitle, isPresented: $viewModel.isDisplayingAlert, actionText: "Ok", action: {}, message: {
             BodyLabel(title: viewModel.lastAlertMessage)
         })
         .sheet(item: $presentedUser, content: { username in

@@ -9,11 +9,18 @@ import SwiftUI
 
 @Observable
 final class FollowersViewModel {
-    @ObservationIgnored let networkManager: NetworkManagerProtocol
+    enum State {
+        case loading
+        case loaded(followers: [Follower])
+        case error
+    }
+
+    let networkManager: NetworkManagerProtocol
+
     var followers: [Follower] = []
     var page = 0
     var hasMoreFollowers = true
-    var viewState: StateOfView = .empty
+    var state = State.loading
 
     var lastAlertMessage = "None" {
         didSet {
@@ -40,7 +47,7 @@ final class FollowersViewModel {
 
     @MainActor
     func getFollowers(username: String) async {
-        viewState = .loading
+        state = .loading
         do {
             page += 1
 
@@ -48,15 +55,10 @@ final class FollowersViewModel {
             if followers.count < 100 { hasMoreFollowers = false }
             self.followers.append(contentsOf: followers)
 
-            if self.followers.isEmpty {
-                viewState = .emptyState
-                return
-            }
-
-            viewState = .gridView
+            state = .loaded(followers: followers)
         } catch {
             page -= 1
-            viewState = .empty
+            state = .error
             lastAlertMessage = error.localizedDescription
         }
     }
@@ -82,19 +84,12 @@ final class FollowersViewModel {
 
     @MainActor
     func reset() {
-        viewState = .empty
+        state = .loading
         followers.removeAll()
         page = 0
         hasMoreFollowers = true
         searchText = ""
         lastAlertMessage = "None"
         isDisplayingAlert = false
-    }
-
-    enum StateOfView {
-        case loading
-        case emptyState
-        case gridView
-        case empty
     }
 }
