@@ -36,5 +36,5 @@ struct FollowerItemView: View {
 }
 
 #Preview {
-    FollowerItemView(user: User.sampleUser, action: {})
+    FollowerItemView(user: User.mockUser, action: {})
 }

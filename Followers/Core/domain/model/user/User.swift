@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User {
+struct User: Codable {
     var login: String
     var avatarUrl: String
     var name: String?
@@ -19,18 +19,4 @@ struct User {
     let following: Int
     let followers: Int
     let createdAt: Date
-}
-
-extension User: Codable {}
-
-extension User {
-    static var sampleUser: User {
-        let decoder = JSONDecoder()
-        decoder.keyDecodingStrategy = .convertFromSnakeCase
-        decoder.dateDecodingStrategy = .iso8601
-
-        let user = try! decoder.decode(User.self, from: testUser)
-
-        return user
-    }
 }

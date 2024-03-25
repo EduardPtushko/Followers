@@ -12,7 +12,7 @@ class MockNetworkManager: NetworkManagerProtocol {
     var mockError: FollowersError?
 
     func getUserInfo(for username: String) async throws -> User {
-        User.sampleUser
+        User.mockUser
     }
 
     func getFollowers(for username: String, page: Int) async throws -> [Follower] {

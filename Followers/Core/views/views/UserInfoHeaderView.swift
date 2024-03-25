@@ -37,5 +37,5 @@ struct UserInfoHeaderView: View {
 }
 
 #Preview {
-    UserInfoHeaderView(user: User.sampleUser)
+    UserInfoHeaderView(user: User.mockUser)
 }

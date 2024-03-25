@@ -25,5 +25,5 @@ struct ItemInfoView: View {
 }
 
 #Preview {
-    ItemInfoView(itemInfoType: .repos(User.sampleUser.publicRepos))
+    ItemInfoView(itemInfoType: .repos(User.mockUser.publicRepos))
 }

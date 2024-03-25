@@ -78,5 +78,5 @@ struct RepoItemView: View {
 }
 
 #Preview {
-    RepoItemView(user: User.sampleUser, action: {})
+    RepoItemView(user: User.mockUser, action: {})
 }

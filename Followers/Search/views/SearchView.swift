@@ -9,9 +9,9 @@ import SwiftUI
 
 struct SearchView: View {
     @State private var text = ""
-    @FocusState private var focusedField: Bool
     @State private var path = NavigationPath()
     @State private var showingAlert = false
+    @FocusState private var focusedField: Bool
 
     var isUsernameEntered: Bool { !text.isEmpty }
 

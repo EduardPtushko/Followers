@@ -8,8 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @SceneStorage("tab_selection") var selection: Int = 0
+
     var body: some View {
-        TabView {
+        TabView(selection: $selection) {
             SearchView()
                 .tabItem {
                     Label("Search", systemImage: "magnifyingglass")

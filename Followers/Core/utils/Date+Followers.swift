@@ -9,6 +9,6 @@ import Foundation
 
 extension Date {
     func convertToMonthYearFormat() -> String {
-        return formatted(.dateTime.month().day())
+        formatted(.dateTime.month().day())
     }
 }

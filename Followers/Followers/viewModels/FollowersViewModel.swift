@@ -7,6 +7,10 @@
 
 import SwiftUI
 
+protocol FollowersFetcher {
+    func fetchFollowers(for username: String, page: Int) async throws -> [Follower]
+}
+
 @Observable
 final class FollowersViewModel {
     enum State: Equatable {
@@ -80,32 +84,3 @@ final class FollowersViewModel {
         error = nil
     }
 }
-
-// enum FollowersError {
-//    case somethingWrong(error: String)
-//    case success
-//    case emptyUser
-//
-//    var message: String {
-//        switch self {
-//        case let .somethingWrong(error):
-//            error
-//        case .success:
-//            "You have successfully favorited this user"
-//        case .emptyUser:
-//            "Please enter a username. We need to know who to look for."
-//        }
-//    }
-//
-//    var title: String {
-//        switch self {
-//        case .somethingWrong:
-//            "Something went wrong"
-//        case .success:
-//            "Success!"
-//        case .emptyUser:
-//            "Empty User"
-//        }
-//    }
-//
-// }
