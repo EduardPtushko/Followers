@@ -7,24 +7,26 @@
 
 import SwiftUI
 
-protocol FollowersFetcher {
+protocol FollowersServiceProtocol {
     func fetchFollowers(for username: String, page: Int) async throws -> [Follower]
+    func getUserInfo(for username: String) async throws -> User
 }
 
 @Observable
 final class FollowersViewModel {
     enum State: Equatable {
         case loading
-        case loaded(followers: [Follower])
+        case loaded
         case error
     }
 
-    let networkManager: NetworkManagerProtocol
+    private let followersService: FollowersServiceProtocol
 
     var followers: [Follower] = []
-    var page = 0
+    var page = 1
     var hasMoreFollowers = true
     var state: State = .loading
+    var isLoading: Bool
 
     var filteredFollowers: [Follower] {
         if searchText.isEmpty {
@@ -34,43 +36,46 @@ final class FollowersViewModel {
         }
     }
 
-    var error: FollowersError?
+    var error: Error?
     var showingSuccess = false
 
     var searchText = ""
 
-    init(networkManager: NetworkManagerProtocol = NetworkManager()) {
-        self.networkManager = networkManager
+    init(isLoading: Bool = true, followersService: FollowersServiceProtocol) {
+        self.isLoading = isLoading
+        self.followersService = followersService
     }
 
     @MainActor
     func getFollowers(username: String) async {
-        state = .loading
+        isLoading = true
         do {
-            page += 1
-
-            let followers = try await networkManager.getFollowers(for: username, page: page)
+            let followers = try await followersService.fetchFollowers(for: username, page: page)
             if followers.count < 100 { hasMoreFollowers = false }
             self.followers.append(contentsOf: followers)
 
-            state = .loaded(followers: followers)
+        } catch is NetworkError {
+            self.error = error
         } catch {
-            page -= 1
             self.error = error as? FollowersError
-            state = .error
         }
+        isLoading = false
     }
 
-    func addFavorite(username: String) {
-        Task {
-            do {
-                let user = try await networkManager.getUserInfo(for: username)
-                let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
-                try PersistenceManager.updateWith(favorite: favorite, actionType: .add)
-                showingSuccess = true
-            } catch {
-                self.error = error as? FollowersError
-            }
+    func getMoreFollowers(username: String) async {
+        page += 1
+        await getFollowers(username: username)
+    }
+
+    @MainActor
+    func addFavorite(username: String) async {
+        do {
+            let user = try await followersService.getUserInfo(for: username)
+            let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
+            try PersistenceManager.updateWith(favorite: favorite, actionType: .add)
+            showingSuccess = true
+        } catch {
+            self.error = error as? FollowersError
         }
     }
 
@@ -78,7 +83,7 @@ final class FollowersViewModel {
     func reset() {
         state = .loading
         followers.removeAll()
-        page = 0
+        page = 1
         hasMoreFollowers = true
         searchText = ""
         error = nil

@@ -12,10 +12,17 @@ enum FollowersRequest: RequestProtocol {
 
     var path: String {
         switch self {
-        case let .getFollowers(username, page):
-            "/users/\(username)/followers?per_page=100&page=\(page)"
+        case let .getFollowers(username, _):
+            "/users/\(username)/followers"
         }
     }
 
     var requestType: RequestType { .GET }
+
+    var urlParams: [String: String?] {
+        switch self {
+        case let .getFollowers(_, page):
+            ["per_page": "100", "page": String(page)]
+        }
+    }
 }

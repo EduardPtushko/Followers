@@ -9,13 +9,13 @@ import SafariServices
 import SwiftUI
 
 struct UserInfoView: View {
-    @State private var viewModel = UserInfoViewModel()
-    let username: String
     @Environment(\.dismiss)
     var dismiss
+    @State private var viewModel = UserInfoViewModel(userInfoFetcher: GetUserInfoService(requestManager: RequestManager(apiManager: APIManager())))
+    let username: String
+
     @State private var isAlertPresented = false
     @State private var errorMessage = ""
-
     @State private var isPresentWebView = false
 
     var action: () -> Void
@@ -28,7 +28,7 @@ struct UserInfoView: View {
                         UserInfoHeaderView(user: user)
 
                         RepoItemView(user: user) {
-                            if let url = URL(string: user.htmlUrl) {
+                            if URL(string: user.htmlUrl) != nil {
                                 isPresentWebView = true
                             } else {
                                 isAlertPresented = true

@@ -13,8 +13,7 @@ struct LoadingView: View {
             .controlSize(.large)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(
-                Color(.systemBackground)
-                    .opacity(0.8)
+                Color(.init(white: 0, alpha: 0.03))
             )
             .ignoresSafeArea()
     }

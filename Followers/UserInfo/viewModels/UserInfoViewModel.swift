@@ -7,10 +7,19 @@
 
 import Foundation
 
+protocol UserInfoFetcher {
+    func fetchUserInfo(username: String) async throws -> User
+}
+
 @Observable
 final class UserInfoViewModel {
-    let networkManager: NetworkManagerProtocol
     var user: User?
+    private let userInfoFetcher: UserInfoFetcher
+
+    init(user: User? = nil, userInfoFetcher: UserInfoFetcher) {
+        self.user = user
+        self.userInfoFetcher = userInfoFetcher
+    }
 
     var followersError: Error? {
         didSet {
@@ -22,14 +31,10 @@ final class UserInfoViewModel {
 
     var showingAlert = false
 
-    init(networkManager: NetworkManagerProtocol = NetworkManager()) {
-        self.networkManager = networkManager
-    }
-
     @MainActor
     func getUser(username: String) async {
         do {
-            let user = try await networkManager.getUserInfo(for: username)
+            let user: User = try await userInfoFetcher.fetchUserInfo(username: username)
             self.user = user
         } catch {
             followersError = error

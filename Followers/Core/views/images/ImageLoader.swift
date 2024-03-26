@@ -17,7 +17,7 @@ actor ImageLoader {
     }
 
     func fetch(_ url: URL) async -> UIImage {
-        let errorImage = UIImage(resource: .error)
+        let errorImage = UIImage(resource: .avatarPlaceholder)
 
         if let status = loaderStatuses[url] {
             switch status {
@@ -71,30 +71,30 @@ extension EnvironmentValues {
 }
 
 struct RemoteImage: View {
-    let source: URL
-    @State private var image: UIImage?
+    let source: String
+    @State private var image: UIImage = .init(resource: .avatarPlaceholder)
 
     @Environment(\.imageLoader) private var imageLoader
 
     var body: some View {
         Group {
-            if let image {
-                Image(uiImage: image)
-            } else {
-                Rectangle()
-                    .background(.red)
-            }
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .task {
             await loadImage(at: source)
         }
     }
 
-    func loadImage(at source: URL) async {
-        image = await imageLoader.fetch(source)
+    func loadImage(at source: String) async {
+        if let url = URL(string: source) {
+            image = await imageLoader.fetch(url)
+        }
     }
 }
 
 #Preview {
-    RemoteImage(source: URL(string: "https://avatars.githubusercontent.com/u/217?v=4")!)
+    RemoteImage(source: "https://avatars.githubusercontent.com/u/217?v=4")
 }
