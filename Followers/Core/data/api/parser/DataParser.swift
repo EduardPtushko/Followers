@@ -21,6 +21,11 @@ struct DataParser: DataParserProtocol {
     }
 
     func parse<T: Decodable>(data: Data) throws -> T {
-        try jsonDecoder.decode(T.self, from: data)
+        do {
+            let decoded: T = try jsonDecoder.decode(T.self, from: data)
+            return decoded
+        } catch {
+            throw NetworkError.invalidData
+        }
     }
 }

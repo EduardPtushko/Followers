@@ -21,9 +21,9 @@ final class UserInfoViewModel {
         self.userInfoFetcher = userInfoFetcher
     }
 
-    var followersError: Error? {
+    var error: FollowersError? {
         didSet {
-            if followersError != nil {
+            if error != nil {
                 showingAlert = true
             }
         }
@@ -36,8 +36,10 @@ final class UserInfoViewModel {
         do {
             let user: User = try await userInfoFetcher.fetchUserInfo(username: username)
             self.user = user
+        } catch let error as NetworkError {
+            self.error = FollowersError.networkError(error)
         } catch {
-            followersError = error
+            self.error = FollowersError.unexpectedError
         }
     }
 }

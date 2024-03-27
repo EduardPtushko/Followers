@@ -10,6 +10,7 @@ import SwiftUI
 struct FollowerListView: View {
     @State var username: String
     @State private var viewModel = FollowersViewModel(followersService: FollowersService(requestManager: RequestManager(apiManager: APIManager())))
+    @Bindable var addViewModel = addFavoriteViewModel
 
     @State private var presentedUser: String?
     @State private var updating: CGFloat = .zero
@@ -23,13 +24,20 @@ struct FollowerListView: View {
 
     var body: some View {
         ZStack {
-            if viewModel.followers.isEmpty, !viewModel.isLoading {
+            if viewModel.followers.isEmpty,
+               !viewModel.isLoading,
+               viewModel.error == nil {
                 EmptyStateView(message: "This user doesn't have any followers. Go follow them.")
+            } else if viewModel.error != nil {
+                EmptyView()
             } else {
                 gridView
                     .searchable(text: $viewModel.searchText, prompt: "Search for a username")
             }
         }
+        .customAlert(addViewModel.error?.title ?? "Error", isPresented: $addViewModel.showingAlert, actionText: addViewModel.error?.buttonTitle ?? "Ok", action: {}, message: {
+            BodyLabel(title: addViewModel.error?.errorDescription ?? "Something went wrong")
+        })
         .overlay {
             if viewModel.isLoading {
                 LoadingView()
@@ -39,17 +47,11 @@ struct FollowerListView: View {
         .task {
             await viewModel.getFollowers(username: username)
         }
-//        .onChange(of: viewModel.error) { _, newValue in
-//            hasError = newValue != nil
-//        }
-        .onChange(of: viewModel.state) { _, newValue in
-            hasError = newValue == .error
-        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     Task {
-                        await viewModel.addFavorite(username: username)
+                        await addViewModel.addFavorite(username: username)
                     }
                 } label: {
                     Image(systemName: "plus")
@@ -57,12 +59,12 @@ struct FollowerListView: View {
                 .tint(.green)
             }
         }
-        .customAlert("Success!", isPresented: $viewModel.showingSuccess, actionText: "Horray!", action: {}, message: {
+        .customAlert("Success!", isPresented: $addViewModel.showingSuccess, actionText: "Horay!", action: {}, message: {
             BodyLabel(title: "You have successfully favorited this user")
         })
-//        .customAlert(viewModel.error?.title ??  "Error", isPresented: $hasError, actionText: "Ok", action: {}, message: {
-//            BodyLabel(title: viewModel.error?.description ?? "")
-//        })
+        .customAlert(viewModel.error?.title ?? "Error", isPresented: $viewModel.showingAlert, actionText: viewModel.error?.buttonTitle ?? "Ok", action: {}, message: {
+            BodyLabel(title: viewModel.error?.errorDescription ?? "Something went wrong")
+        })
         .sheet(item: $presentedUser, content: { username in
             UserInfoView(username: username) {
                 Task {
@@ -82,7 +84,7 @@ extension FollowerListView {
             LazyVGrid(columns: columns, spacing: 10) {
                 ForEach(viewModel.filteredFollowers) { follower in
                     VStack {
-//                        AvatarImageView(urlSting: follower.avatarUrl)
+                        //                        AvatarImageView(urlSting: follower.avatarUrl)
                         RemoteImage(source: follower.avatarUrl)
                             .padding(8)
 

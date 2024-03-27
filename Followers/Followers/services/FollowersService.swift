@@ -22,10 +22,4 @@ extension FollowersService: FollowersServiceProtocol {
 
         return followers
     }
-
-    func getUserInfo(for username: String) async throws -> User {
-        let requestData = UserInfoRequest.getUserInfo(username: username)
-        let user: User = try await requestManager.initRequest(with: requestData)
-        return user
-    }
 }

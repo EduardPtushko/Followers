@@ -48,8 +48,8 @@ struct FavoritesListView: View {
                 }
             }
         }
-        .customAlert(viewModel.followersError?.title ?? "", isPresented: $viewModel.showingAlert, actionText: "Ok", action: {}, message: {
-            Text(viewModel.followersError?.description ?? "")
+        .customAlert(viewModel.followersError?.title ?? "", isPresented: $viewModel.showingAlert, actionText: viewModel.followersError?.buttonTitle ?? "Ok", action: {}, message: {
+            Text(viewModel.followersError?.errorDescription ?? "")
         })
         .onAppear {
             viewModel.getFavorites()

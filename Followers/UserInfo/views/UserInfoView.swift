@@ -9,13 +9,12 @@ import SafariServices
 import SwiftUI
 
 struct UserInfoView: View {
+    let username: String
     @Environment(\.dismiss)
     var dismiss
     @State private var viewModel = UserInfoViewModel(userInfoFetcher: GetUserInfoService(requestManager: RequestManager(apiManager: APIManager())))
-    let username: String
 
     @State private var isAlertPresented = false
-    @State private var errorMessage = ""
     @State private var isPresentWebView = false
 
     var action: () -> Void
@@ -60,6 +59,9 @@ struct UserInfoView: View {
         }
         .customAlert("Invalid URL", isPresented: $isAlertPresented, actionText: "Ok", action: {}, message: {
             Text("The url attached to this user is invalid")
+        })
+        .customAlert(viewModel.error?.title ?? "Error", isPresented: $viewModel.showingAlert, actionText: viewModel.error?.buttonTitle ?? "Ok", action: {}, message: {
+            BodyLabel(title: viewModel.error?.errorDescription ?? "Something went wrong.")
         })
         .fullScreenCover(isPresented: $isPresentWebView, content: {
             if let user = viewModel.user {
