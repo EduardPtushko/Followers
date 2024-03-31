@@ -248,3 +248,17 @@ let testUser: Data = """
   "updated_at": "2024-02-19T14:24:14Z"
 }
 """.data(using: .utf8)!
+
+let testInvalidUser: Data = """
+{
+  "login": 1,
+  "id": 20762,
+  "node_id": "MDQ6VXNlcjIwNzYy",
+  "avatar_url": "https://avatars.githubusercontent.com/u/20762?v=4",
+  "gravatar_id": "",
+}
+""".data(using: .utf8)!
+
+let testEmptyData: Data = """
+
+""".data(using: .utf8)!

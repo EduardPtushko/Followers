@@ -7,18 +7,28 @@
 
 import Foundation
 
+protocol PersistenceManagerProtocol {
+    func updateWith(favorite: Follower, actionType: PersistenceActionType) throws
+    func retrieveFavorites() throws -> [Follower]
+    func save(favorites: [Follower]) throws
+}
+
 enum PersistenceActionType {
     case add, remove
 }
 
-enum PersistenceManager {
-    static let defaults = UserDefaults.standard
+class PersistenceManager: PersistenceManagerProtocol {
+    var defaults: UserDefaults
+
+    init(defaults: UserDefaults = .standard) {
+        self.defaults = defaults
+    }
 
     enum Keys {
         static let favorites = "favorites"
     }
 
-    static func updateWith(favorite: Follower, actionType: PersistenceActionType) throws {
+    func updateWith(favorite: Follower, actionType: PersistenceActionType) throws {
         var favorites = try retrieveFavorites()
         switch actionType {
         case .add:
@@ -33,7 +43,7 @@ enum PersistenceManager {
         try save(favorites: favorites)
     }
 
-    static func retrieveFavorites() throws -> [Follower] {
+    func retrieveFavorites() throws -> [Follower] {
         guard let favoritesData = defaults.object(forKey: Keys.favorites) as? Data else {
             return []
         }
@@ -43,11 +53,11 @@ enum PersistenceManager {
 
             return favorites
         } catch {
-            throw FollowersError.unableToFavorite
+            throw FollowersError.unableToComplete
         }
     }
 
-    static func save(favorites: [Follower]) throws {
+    func save(favorites: [Follower]) throws {
         let encoder = JSONEncoder()
         let data = try encoder.encode(favorites)
         defaults.set(data, forKey: Keys.favorites)

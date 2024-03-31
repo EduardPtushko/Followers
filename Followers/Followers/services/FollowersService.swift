@@ -15,7 +15,7 @@ actor FollowersService {
     }
 }
 
-extension FollowersService: FollowersServiceProtocol {
+extension FollowersService: FollowersFetcher {
     func fetchFollowers(for username: String, page: Int) async throws -> [Follower] {
         let requestData = FollowersRequest.getFollowers(username: username, page: page)
         let followers: [Follower] = try await requestManager.initRequest(with: requestData)

@@ -17,7 +17,7 @@ class URLProtocolStub: URLProtocol {
     }
 
     override func startLoading() {
-        if let url = request.url {
+        if let _ = request.url {
             client?.urlProtocol(self, didReceive: URLResponse(), cacheStoragePolicy: .notAllowed)
 //            client?.urlProtocol(self, didLoad: )
         } else {

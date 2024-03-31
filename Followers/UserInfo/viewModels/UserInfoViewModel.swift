@@ -39,7 +39,11 @@ final class UserInfoViewModel {
         } catch let error as NetworkError {
             self.error = FollowersError.networkError(error)
         } catch {
-            self.error = FollowersError.unexpectedError
+            if let error = error as? FollowersError {
+                self.error = error
+            } else {
+                self.error = FollowersError.unexpectedError
+            }
         }
     }
 }

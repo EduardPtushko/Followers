@@ -64,7 +64,7 @@ extension FollowersError: LocalizedError {
             "Ok"
         case .unexpectedError:
             "Ok"
-        case .networkError(let networkError):
+        case .networkError:
             "Ok"
         }
     }

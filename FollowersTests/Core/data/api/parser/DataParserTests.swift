@@ -11,13 +11,9 @@ import XCTest
 final class DataParserTests: XCTestCase {
     private let dataParser = DataParser()
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-    }
+    override func setUpWithError() throws {}
 
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
-    }
+    override func tearDownWithError() throws {}
 
     func testDataParserDecodesUser() throws {
         let user: User = try dataParser.parse(data: testUser)
@@ -33,5 +29,47 @@ final class DataParserTests: XCTestCase {
 
         XCTAssertEqual(followers.count, 10)
         XCTAssertEqual(followers[0].login, "tkersey")
+    }
+
+    func testDataParserInvalidDataShouldThrow() throws {
+        XCTAssertThrowsError(try dataParser.parse(data: testInvalidUser) as User)
+
+        do {
+            let _: User = try dataParser.parse(data: testInvalidUser)
+        } catch {
+            guard let parserError = error as? NetworkError else {
+                XCTFail("This is the wrong type of error for missing files")
+                return
+            }
+            XCTAssertEqual(parserError, NetworkError.invalidData)
+        }
+    }
+
+    func testDataParserEmptyDataShouldThrow() throws {
+        XCTAssertThrowsError(try dataParser.parse(data: testEmptyData) as User)
+
+        do {
+            let _: User = try dataParser.parse(data: testEmptyData)
+        } catch {
+            guard let parserError = error as? NetworkError else {
+                XCTFail("This is the wrong type of error for missing files")
+                return
+            }
+            XCTAssertEqual(parserError, NetworkError.invalidData)
+        }
+    }
+
+    func testDataParserInvalidJsonShouldThrow() throws {
+        XCTAssertThrowsError(try dataParser.parse(data: testDataFollowers) as User)
+
+        do {
+            let _: User = try dataParser.parse(data: testDataFollowers)
+        } catch {
+            guard let parserError = error as? NetworkError else {
+                XCTFail("This is the wrong type of error for missing files")
+                return
+            }
+            XCTAssertEqual(parserError, NetworkError.invalidData)
+        }
     }
 }

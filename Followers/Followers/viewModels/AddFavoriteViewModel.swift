@@ -14,6 +14,7 @@ protocol AddFavorite {
 @Observable
 final class AddFavoriteViewModel {
     private var addingFavoriteService: AddFavorite
+    private var persistenceManager: PersistenceManagerProtocol
     var showingSuccess = false
     var error: FollowersError? {
         didSet {
@@ -25,9 +26,10 @@ final class AddFavoriteViewModel {
 
     var showingAlert = false
 
-    init(error: FollowersError? = nil, addFavoriteService: AddFavorite) {
+    init(error: FollowersError? = nil, addFavoriteService: AddFavorite, persistenceManager: PersistenceManagerProtocol = PersistenceManager()) {
         self.error = error
         addingFavoriteService = addFavoriteService
+        self.persistenceManager = persistenceManager
     }
 
     @MainActor
@@ -35,7 +37,7 @@ final class AddFavoriteViewModel {
         do {
             let user = try await addingFavoriteService.getUserInfo(for: username)
             let favorite = Follower(login: user.login, avatarUrl: user.avatarUrl)
-            try PersistenceManager.updateWith(favorite: favorite, actionType: .add)
+            try persistenceManager.updateWith(favorite: favorite, actionType: .add)
             showingSuccess = true
         } catch let error as NetworkError {
             self.error = FollowersError.networkError(error)
@@ -48,5 +50,3 @@ final class AddFavoriteViewModel {
         }
     }
 }
-
-var addFavoriteViewModel = AddFavoriteViewModel(addFavoriteService: AddingFavoriteService(requestManager: RequestManager(apiManager: APIManager())))

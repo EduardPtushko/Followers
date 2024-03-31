@@ -26,7 +26,7 @@ class RequestManager: RequestManagerProtocol {
     }
 }
 
-extension RequestManager {
+extension RequestManagerProtocol {
     var parser: DataParserProtocol {
         DataParser()
     }

@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-protocol FollowersServiceProtocol {
+protocol FollowersFetcher {
     func fetchFollowers(for username: String, page: Int) async throws -> [Follower]
 }
 
 @Observable
 final class FollowersViewModel {
-    private let followersService: FollowersServiceProtocol
+    private let followersService: FollowersFetcher
     private(set) var followers: [Follower] = []
     private(set) var page = 1
     private(set) var hasMoreFollowers = true
@@ -37,7 +37,7 @@ final class FollowersViewModel {
         }
     }
 
-    init(isLoading: Bool = true, followersService: FollowersServiceProtocol) {
+    init(isLoading: Bool = true, followersService: FollowersFetcher) {
         self.isLoading = isLoading
         self.followersService = followersService
     }
